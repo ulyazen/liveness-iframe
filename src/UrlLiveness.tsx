@@ -236,9 +236,11 @@ export default function UrlLiveness() {
               width="100%"
               height="100%"
               allow="camera;microphone;"
+              scrolling="yes"
               style={{
                 border: "none",
                 pointerEvents: "auto",
+                overflow: "auto",
               }}
               onLoad={handleIframeLoad}
             />
