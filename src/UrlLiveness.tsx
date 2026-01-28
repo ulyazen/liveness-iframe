@@ -24,6 +24,9 @@ import ClearIcon from "@mui/icons-material/Clear";
 import LanguageIcon from "@mui/icons-material/Language";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ErrorIcon from "@mui/icons-material/Error";
+import ZoomInIcon from "@mui/icons-material/ZoomIn";
+import ZoomOutIcon from "@mui/icons-material/ZoomOut";
+import RestartAltIcon from "@mui/icons-material/RestartAlt";
 
 interface LivenessData {
   result: boolean;
@@ -60,6 +63,19 @@ export default function UrlLiveness() {
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [livenessData, setLivenessData] = useState<LivenessData | null>(null);
+  const [zoomLevel, setZoomLevel] = useState(1);
+
+  const handleZoomIn = () => {
+    setZoomLevel((prev) => Math.min(prev + 0.1, 2));
+  };
+
+  const handleZoomOut = () => {
+    setZoomLevel((prev) => Math.max(prev - 0.1, 0.5));
+  };
+
+  const handleZoomReset = () => {
+    setZoomLevel(1);
+  };
 
   const validateUrl = (inputUrl: string): string | null => {
     try {
@@ -229,21 +245,83 @@ export default function UrlLiveness() {
               </Button>
             </Box>
 
-            <iframe
-              id="liveness-iframe"
-              title="Liveness Iframe"
-              src={landingUrl}
-              width="100%"
-              height="100%"
-              allow="camera;microphone;"
-              scrolling="yes"
-              style={{
-                border: "none",
-                pointerEvents: "auto",
+            {/* Zoom Controls */}
+            <Box
+              sx={{
+                position: "absolute",
+                top: 10,
+                right: 10,
+                zIndex: 20,
+                display: "flex",
+                gap: 1,
+                alignItems: "center",
+                bgcolor: "rgba(255,255,255,0.9)",
+                borderRadius: "25px",
+                padding: "4px 12px",
+                boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
+              }}
+            >
+              <IconButton
+                size="small"
+                onClick={handleZoomOut}
+                disabled={zoomLevel <= 0.5}
+                sx={{ color: "#14517D" }}
+              >
+                <ZoomOutIcon />
+              </IconButton>
+              <Typography
+                sx={{
+                  fontSize: "12px",
+                  color: "#14517D",
+                  minWidth: "45px",
+                  textAlign: "center",
+                  fontWeight: "bold",
+                }}
+              >
+                {Math.round(zoomLevel * 100)}%
+              </Typography>
+              <IconButton
+                size="small"
+                onClick={handleZoomIn}
+                disabled={zoomLevel >= 2}
+                sx={{ color: "#14517D" }}
+              >
+                <ZoomInIcon />
+              </IconButton>
+              <IconButton
+                size="small"
+                onClick={handleZoomReset}
+                sx={{ color: "#D99D2F" }}
+              >
+                <RestartAltIcon />
+              </IconButton>
+            </Box>
+
+            {/* Iframe Container with Zoom */}
+            <Box
+              sx={{
+                width: "100%",
+                height: "100%",
                 overflow: "auto",
               }}
-              onLoad={handleIframeLoad}
-            />
+            >
+              <iframe
+                id="liveness-iframe"
+                title="Liveness Iframe"
+                src={landingUrl}
+                width={`${100 / zoomLevel}%`}
+                height={`${100 / zoomLevel}%`}
+                allow="camera;microphone;"
+                scrolling="yes"
+                style={{
+                  border: "none",
+                  pointerEvents: "auto",
+                  transform: `scale(${zoomLevel})`,
+                  transformOrigin: "top left",
+                }}
+                onLoad={handleIframeLoad}
+              />
+            </Box>
           </Box>
         ) : (
           /* Input Form View */
