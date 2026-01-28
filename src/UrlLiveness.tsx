@@ -10,7 +10,6 @@ import {
   Button,
   DialogContent,
   Dialog,
-  Grid,
   CircularProgress,
   Modal,
   Snackbar,
@@ -55,7 +54,6 @@ export default function UrlLiveness() {
   const [url, setUrl] = useState("");
   const [landingUrl, setLandingUrl] = useState<string | null>(null);
   const [iframeLoading, setIframeLoading] = useState(true);
-  const [openModal, setOpenModal] = useState(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState<AlertColor>("success");
@@ -395,40 +393,40 @@ export default function UrlLiveness() {
                     <Divider sx={{ mb: 2 }} />
 
                     {/* Result Details */}
-                    <Grid container spacing={1}>
-                      <Grid item xs={6}>
+                    <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2 }}>
+                      <Box sx={{ width: "45%" }}>
                         <Typography sx={{ fontSize: "11px", color: "#666" }}>Score</Typography>
                         <Typography sx={{ fontSize: "14px", fontWeight: "bold", color: "#14517D" }}>
                           {livenessData.score?.toFixed(2) || "-"}
                         </Typography>
-                      </Grid>
-                      <Grid item xs={6}>
+                      </Box>
+                      <Box sx={{ width: "45%" }}>
                         <Typography sx={{ fontSize: "11px", color: "#666" }}>Attempt</Typography>
                         <Typography sx={{ fontSize: "14px", fontWeight: "bold", color: "#14517D" }}>
                           {livenessData.attempt} / {livenessData.max_attempt_limit}
                         </Typography>
-                      </Grid>
-                      <Grid item xs={12}>
+                      </Box>
+                      <Box sx={{ width: "100%" }}>
                         <Typography sx={{ fontSize: "11px", color: "#666" }}>Message</Typography>
                         <Typography sx={{ fontSize: "12px", color: "#333" }}>
                           {livenessData.message || "-"}
                         </Typography>
-                      </Grid>
-                      <Grid item xs={12}>
+                      </Box>
+                      <Box sx={{ width: "100%" }}>
                         <Typography sx={{ fontSize: "11px", color: "#666" }}>Transaction ID</Typography>
                         <Typography sx={{ fontSize: "11px", color: "#333", wordBreak: "break-all" }}>
                           {livenessData.transaction_id || "-"}
                         </Typography>
-                      </Grid>
+                      </Box>
                       {livenessData.timeout && (
-                        <Grid item xs={12}>
+                        <Box sx={{ width: "100%" }}>
                           <Typography sx={{ fontSize: "12px", color: "#ff9800", fontWeight: "bold" }}>
                             ⚠️ Timeout occurred
                           </Typography>
-                        </Grid>
+                        </Box>
                       )}
                       {livenessData.fc_token && (
-                        <Grid item xs={12}>
+                        <Box sx={{ width: "100%" }}>
                           <Typography sx={{ fontSize: "11px", color: "#666" }}>FC Token</Typography>
                           <Typography
                             sx={{
@@ -442,43 +440,41 @@ export default function UrlLiveness() {
                           >
                             {livenessData.fc_token}
                           </Typography>
-                        </Grid>
+                        </Box>
                       )}
                       {livenessData.send_from && (
-                        <Grid item xs={6}>
+                        <Box sx={{ width: "45%" }}>
                           <Typography sx={{ fontSize: "11px", color: "#666" }}>Send From</Typography>
                           <Typography sx={{ fontSize: "12px", color: "#333" }}>
                             {livenessData.send_from}
                           </Typography>
-                        </Grid>
+                        </Box>
                       )}
                       {livenessData.balance_transaction_id && (
-                        <Grid item xs={6}>
+                        <Box sx={{ width: "45%" }}>
                           <Typography sx={{ fontSize: "11px", color: "#666" }}>Balance Transaction ID</Typography>
                           <Typography sx={{ fontSize: "12px", color: "#333" }}>
                             {livenessData.balance_transaction_id}
                           </Typography>
-                        </Grid>
+                        </Box>
                       )}
-                    </Grid>
+                    </Box>
                   </Box>
                 )}
 
                 {/* Captured Image */}
                 {capturedImage && (
-                  <Grid container>
-                    <Grid item xs={12}>
-                      <Typography
-                        gutterBottom
-                        sx={{
-                          textAlign: "center",
-                          paddingTop: 2,
-                          fontSize: "12px",
-                        }}
-                      >
-                        <b>Hasil Foto Liveness</b>
-                      </Typography>
-                    </Grid>
+                  <Box>
+                    <Typography
+                      gutterBottom
+                      sx={{
+                        textAlign: "center",
+                        paddingTop: 2,
+                        fontSize: "12px",
+                      }}
+                    >
+                      <b>Hasil Foto Liveness</b>
+                    </Typography>
                     <Box
                       sx={{
                         width: "100%",
@@ -505,7 +501,7 @@ export default function UrlLiveness() {
                         }}
                       />
                     </Box>
-                  </Grid>
+                  </Box>
                 )}
               </Box>
             )}
@@ -521,29 +517,27 @@ export default function UrlLiveness() {
                 backgroundColor: "white",
               }}
             >
-              <Grid container spacing={2}>
-                <Grid item xs={12} justifyContent="center" display="flex">
-                  <Button
-                    variant="contained"
-                    sx={{
-                      width: "100%",
-                      maxWidth: "568px",
-                      borderRadius: "30px",
-                      bgcolor: "#14517D",
-                      "&:hover": {
-                        bgcolor: "#0d3d5e",
-                      },
-                      "&:disabled": {
-                        bgcolor: "#ccc",
-                      },
-                    }}
-                    onClick={capturedImage ? handleBackToInput : handleLoadUrl}
-                    disabled={!url.trim()}
-                  >
-                    {capturedImage ? "Selesai" : "Load Liveness URL"}
-                  </Button>
-                </Grid>
-              </Grid>
+              <Box sx={{ display: "flex", justifyContent: "center" }}>
+                <Button
+                  variant="contained"
+                  sx={{
+                    width: "100%",
+                    maxWidth: "568px",
+                    borderRadius: "30px",
+                    bgcolor: "#14517D",
+                    "&:hover": {
+                      bgcolor: "#0d3d5e",
+                    },
+                    "&:disabled": {
+                      bgcolor: "#ccc",
+                    },
+                  }}
+                  onClick={capturedImage ? handleBackToInput : handleLoadUrl}
+                  disabled={!url.trim()}
+                >
+                  {capturedImage ? "Selesai" : "Load Liveness URL"}
+                </Button>
+              </Box>
             </Box>
           </Box>
         )}
@@ -616,9 +610,9 @@ export default function UrlLiveness() {
         </Box>
       </Modal>
 
-      {/* Loading Dialog */}
+      {/* Loading Dialog - kept for potential future use */}
       <Dialog
-        open={openModal}
+        open={false}
         PaperProps={{
           sx: {
             backgroundColor: "rgba(0, 0, 0, 0.5)",
